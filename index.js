@@ -16,7 +16,7 @@ const CAPTION = `🌐 *Important Announcement for Coaching Centers in India* �
 
 🔍 *Who We Are:* Codestam Technologies (www.codestam.com)
 
-✨ *Our Offer:* Affordable landing website for your coaching center, starting at just ₹3500. We also specialize in custom websites/software.
+✨ *Our Offer:* Affordable landing website for your coaching center, starting at just ₹3500. We also specialize in custom websites/software development.
 
 🏃‍♂ *Limited Time Offer - Act Now!*
 
