@@ -14,7 +14,7 @@ function csvToArray(file_path) {
 
     for (const row of rows) {
         // Assuming one column in the CSV
-        const value = row.trim().split(',')[0].replace(' ', '');
+        const value = row.trim().split(',')[0].replace(' ', '').substring(1);
         resultArray.push(value);
     }
 

@@ -4,18 +4,29 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 
 const csvToArray = require('./csvToArray')
 
-const CAPTION = `*Important: New rules for coaching centers in India*
+const CAPTION = `🌐 *Important Announcement for Coaching Centers in India* 🌐
 
-The Education Ministry has made it *mandatory* for all coaching centers to update their websites with all the details about their tutors, courses, fees, and facilities¹². *Otherwise, they will face **huge fines* and even *lose their registration*¹².
+📣 *Update from the Education Ministry: New Rules in Effect*
 
-This is a big opportunity for you to showcase your coaching center to the world and attract more students. But you need a website that meets the standards and stands out from the crowd.
+👉 The Education Ministry now mandates all coaching centers to have a website showcasing tutors, courses, fees, and facilities. Failure to comply may result in hefty fines or registration loss.
 
-We are Codestam Technologies, a leading UI/UX design and development company that specializes in creating stunning websites and software solutions for businesses and institutes. We have a special offer for coaching institutes like yours. We can create a landing website for you with a starting price of just ₹3500. It will include a responsive design, a user-friendly interface, and all the essential features that you need to showcase your coaching center. We can also create custom websites based on your specific requirements and preferences.
+🚀 *Seize the Opportunity to Shine Online!*
 
-But hurry, this offer is valid only for a limited time. Don't miss this chance to boost your online presence and reputation. Reply with yes and let's build a beautiful website for your institute. Trust us, you won't regret it. 😊`
+🌐 Ensure your coaching center stands out! We're here to help you with an incredible offer.
+
+🔍 *Who We Are:* Codestam Technologies (www.codestam.com)
+
+✨ *Our Offer:* Affordable landing website for your coaching center, starting at just ₹3500. We also specialize in custom websites/software.
+
+🏃‍♂ *Limited Time Offer - Act Now!*
+
+📩 Reply with 'Yes' to elevate your institute's online presence. Let's create a stunning website that attracts more students and enhances your reputation. Trust us, you'll love it! 🚀`
 
 const client = new Client({
-  authStrategy: new LocalAuth()
+  authStrategy: new LocalAuth(),
+  puppeteer: {
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+        }
 });
 
 
@@ -27,7 +38,7 @@ client.on('qr', (qr) => {
 client.on('ready', async () => {
     console.log('Client is ready!');
     
-    const phoneNumbers = csvToArray('./public/filtered_data2.csv');
+    const phoneNumbers = csvToArray('./public/test.csv');
     
     try {
         await Promise.all(phoneNumbers.map(async (phoneNumber) => {
@@ -77,15 +88,12 @@ const verifyAndSendAsync = async (number) => {
 
   client.isRegisteredUser(number_details._serialized).then(function(isRegistered) {
     if(isRegistered) {
-        const media = MessageMedia.fromFilePath('./public/demo.jpg'); // Change to whatever you have to send
+        const media = MessageMedia.fromFilePath('./public/Ad001.mov'); // Change to whatever you have to send
         client.sendMessage(number_details._serialized , media, {
           caption : CAPTION
         });
     }
 })  
 }
-
-
-
 
 client.initialize();
