@@ -38,13 +38,13 @@ client.on('qr', (qr) => {
 client.on('ready', async () => {
     console.log('Client is ready!');
     
-    const phoneNumbers = csvToArray('./public/test.csv');
+    const phoneNumbers = csvToArray('./public/run_data.csv');
     
     try {
-        await Promise.all(phoneNumbers.map(async (phoneNumber) => {
-            await verifyAndSendAsync(phoneNumber);
-            console.log(`Message sent to ${phoneNumber}`);
-        }));
+      for (let index = 0; index < phoneNumbers.length; index++) {
+        verifyAndSendAsync(phoneNumbers[index])
+        console.log("Ja rha hai")
+    }
         
         console.log('All messages sent successfully.');
     } catch (error) {
