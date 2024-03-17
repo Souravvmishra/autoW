@@ -24,7 +24,7 @@ const CAPTION = ` *Important Announcement for Coaching Centers in India*
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    executablePath: './chrome.exe'
   }
 });
 
