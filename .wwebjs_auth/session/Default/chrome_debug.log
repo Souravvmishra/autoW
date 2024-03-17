@@ -1,4 +1,0 @@
-[0317/195323.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'ambient-light-sensor'.", source:  (0)
-[0317/210937.770:INFO:CONSOLE(0)] "The FetchEvent for "https://web.whatsapp.com/img/favicon-error2_fb2afa4bfd23495c7bd2555bb080bb35.png" resulted in a network error response: the promise was rejected.", source:  (0)
-[0317/210937.805:INFO:CONSOLE(344)] "Uncaught (in promise) TypeError: Failed to fetch", source: https://web.whatsapp.com/serviceworker.js (344)
-[0317/210947.754:WARNING:dns_config_service_win.cc(586)] Failed to read DnsConfig.
