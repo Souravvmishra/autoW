@@ -2,6 +2,9 @@ const qrcode = require('qrcode-terminal');
 
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const csvToArray = require('./csvToArray');
+const locateChrome = require('locate-chrome');
+const executablePath = await new Promise(resolve => locateChrome(arg => resolve(arg)));
+
 
 const CAPTION = ` *Important Announcement for Coaching Centers in India* 
 
@@ -24,7 +27,7 @@ const CAPTION = ` *Important Announcement for Coaching Centers in India*
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    executablePath: './chrome.exe'
+    executablePath: executablePath
   }
 });
 
