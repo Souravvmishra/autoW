@@ -1,99 +1,62 @@
-const qrcode = require('qrcode-terminal');
+const venom = require('venom-bot');
+const fetch = require('node-fetch');
 
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+venom
+  .create({
+    session: 'session-name' // name of session
+  })
+  .then((client) => start(client))
+  .catch((erro) => {
+    console.log(erro);
+  });
 
-const csvToArray = require('./csvToArray')
+function start(client) {
+  console.log('I\'m Running');
+  client.onMessage((message) => {
+    console.log(message);
+    if (message) {
+      const messageParts = message.body.split(' - ');
+      if (messageParts.length === 2 && messageParts[0].startsWith('@')) {
+        const number = messageParts[0].substring(1).trim();
+        const userMessage = messageParts[1].trim();
 
-const CAPTION = `🌐 *Important Announcement for Coaching Centers in India* 🌐
+        var myHeaders = new Headers();
+        myHeaders.append("Cookie", "ARRAffinity=bc20b7669fac044c0a1a8078bf9b401e6dc2ba9a9e2f1e769f43a8cbcbac47fb; ARRAffinitySameSite=bc20b7669fac044c0a1a8078bf9b401e6dc2ba9a9e2f1e769f43a8cbcbac47fb");
+        myHeaders.append("Content-Type", "application/json");
 
-📣 *Update from the Education Ministry: New Rules in Effect*
-
-👉 The Education Ministry now mandates all coaching centers to have a website showcasing tutors, courses, fees, and facilities. Failure to comply may result in hefty fines or registration loss.
-
-🚀 *Seize the Opportunity to Shine Online!*
-
-🌐 Ensure your coaching center stands out! We're here to help you with an incredible offer.
-
-🔍 *Who We Are:* Codestam Technologies (www.codestam.com)
-
-✨ *Our Offer:* Affordable landing website for your coaching center, starting at just ₹3500. We also specialize in custom websites/software development.
-
-🏃‍♂ *Limited Time Offer - Act Now!*
-
-📩 Reply with 'Yes' to elevate your institute's online presence. Let's create a stunning website that attracts more students and enhances your reputation. Trust us, you'll love it! 🚀`
-
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  puppeteer: {
-    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-        }
-});
-
-
-client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
-});
-
-
-client.on('ready', async () => {
-    console.log('Client is ready!');
-    
-    const phoneNumbers = csvToArray('./public/run_data.csv');
-    
-    try {
-      for (let index = 0; index < phoneNumbers.length; index++) {
-        verifyAndSendAsync(phoneNumbers[index])
-        console.log("Ja rha hai")
-    }
-        
-        console.log('All messages sent successfully.');
-    } catch (error) {
-        console.error('Error sending messages:', error);
-    }
-});
-
-
-// Function that will be called on getting any message
-client.on('message', async (message) => {
-  console.log(message);
-	if (message.body === '!ping') {
-		await message.reply('pong');
-	}
-
-  if (message.body === '!send-media') {
-        // How to send media 👇
-        const media = MessageMedia.fromFilePath('./index.js');
-        await client.sendMessage(message.from, media);
-  }
-
-});
-
-
-
-// Function to verify user and send document
-const verifyAndSendAsync = async (number) => {
-  sanitized_number = number.toString().replace(/\D/g, "");
-  // console.log(sanitized_number);
-
-  const final_number = `91${sanitized_number.substring(sanitized_number.length - 10)}`; 
-  // console.log({final_number});
-
-  const number_details = await client.getNumberId(final_number);
-  // console.log({number_details});
-
-  if (!number_details) {
-    console.log(`${final_number} is not on whatsapp`);
-    return
-  }
-
-  client.isRegisteredUser(number_details._serialized).then(function(isRegistered) {
-    if(isRegistered) {
-        const media = MessageMedia.fromFilePath('./public/Ad001.mov'); // Change to whatever you have to send
-        client.sendMessage(number_details._serialized , media, {
-          caption : CAPTION
+        var raw = JSON.stringify({
+          "search_term": `rephrase this text message to be without blame and judgment {${userMessage}} only include response in your response. Nothing else. Use no special characters. Dont write it like here is your reprashed sentence. nothing like this. just pure response.`
         });
-    }
-})  
-}
 
-client.initialize();
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        fetch("https://kansha-ai-backend-2.azurewebsites.net/kansha_ai/api/gpt/", requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            console.log(result);
+            client
+              .sendText(number + '@c.us', result.data)
+              .then((result) => {
+                console.log('Result: ', result); // return object success
+              })
+              .catch((erro) => {
+                console.error('Error when sending: ', erro); // return object error
+              });
+          })
+          .catch(error => {
+            console.log('error', error);
+            client
+              .sendText(number + '@c.us', 'Error processing your request.')
+              .catch((erro) => {
+                console.error('Error when sending error message: ', erro); // return object error
+              });
+          });
+      }
+    }
+  });
+}
